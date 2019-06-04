@@ -11,9 +11,55 @@
     module.exports = factory(require('./marked'));
   } else {
     // Browser globals (root is window)
-    root.RevealMarkdown = factory(root.marked);
+
+    const renderer = new root.marked.Renderer();
+
+    // p 要素のレンダラーを拡張 (通常のp要素は.から始める)
+    renderer.paragraph = function (text) {
+      const isParagraph = text.match(/^(\.\s*)/);
+      let out = text;
+      if (isParagraph) {
+        text = text.replace(isParagraph[1], '');
+        out = `<p>${text}</p>\n`;
+      }
+      return out;
+    }
+
+    // del 要素のレンダラーを拡張
+    renderer.del = function (text) {
+      let out = `<del>${text}</del>`;
+      const isDivStart = text.match(/^\s*{:(.*)}$/);
+      if (isDivStart) {
+        out = `<div class="${isDivStart[1]}">`;
+      }
+      if (text == 'x') out = `</div>`;
+      out = `${out}\n`;
+      return out;
+    }
+
+    // img 要素のレンダラーを拡張
+    renderer.image = function (href, title, text) {
+      if (this.options.baseUrl && !originIndependentUrl.test(href)) {
+        href = resolveUrl(this.options.baseUrl, href);
+      }
+      const size = text.match(/{(.+),(.+)}/);
+      if (size) {
+        text = text.replace(size[0], '');
+      }
+      var out = '<img src="' + href + '" alt="' + text + '"';
+      if (title) {
+        out += ` title="${title}"`;
+      }
+      if (size) {
+        out += ` style="width:${size[1]}; height:${size[2]}"`;
+      }
+      out += this.options.xhtml ? '/>' : '>';
+      return out;
+    };
+
+    root.RevealMarkdown = factory(root.marked, renderer);
   }
-}(this, function (marked) {
+}(this, function (marked, renderer) {
 
   var DEFAULT_SLIDE_SEPARATOR = '^\r?\n---\r?\n$',
     DEFAULT_NOTES_SEPARATOR = 'notes?:',
@@ -376,7 +422,7 @@
       var notes = section.querySelector('aside.notes');
       var markdown = getMarkdownFromSlide(section);
 
-      section.innerHTML = marked(markdown);
+      section.innerHTML = marked(markdown, { renderer: renderer });
       addAttributes(section, section, null, section.getAttribute('data-element-attributes') ||
         section.parentNode.getAttribute('data-element-attributes') ||
         DEFAULT_ELEMENT_ATTRIBUTES_SEPARATOR,

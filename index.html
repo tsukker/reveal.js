@@ -14,6 +14,9 @@
   <!-- Theme used for syntax highlighting of code -->
   <link rel="stylesheet" href="lib/css/monokai.css">
 
+  <!-- Custom style https://qiita.com/vimyum/items/a8377a76dac101024ae2 -->
+  <link rel="stylesheet" href="custom-style.css">
+
   <!-- Printing and PDF exports -->
   <script>
     var link = document.createElement('link');
@@ -27,8 +30,9 @@
 <body>
   <div class="reveal">
     <div class="slides">
-      <section>Slide 1</section>
-      <section>Slide 2</section>
+      <section data-markdown="index.md" data-separator="^\n---\n$" data-separator-vertical="^\n>>>\n$"
+        data-separator-notes="^Notes:" class="grid-container">
+      </section>
     </div>
   </div>
 
@@ -43,8 +47,13 @@
         { src: 'plugin/markdown/marked.js' },
         { src: 'plugin/markdown/markdown.js' },
         { src: 'plugin/notes/notes.js', async: true },
-        { src: 'plugin/highlight/highlight.js', async: true }
-      ]
+        { src: 'plugin/highlight/highlight.js', async: true },
+        { src: 'plugin/math/math.js', async: true },
+      ],
+      controlsTutorial: false,
+      slideNumber: 'h-v/t',
+      history: true,
+      transition: "none",
     });
   </script>
 </body>

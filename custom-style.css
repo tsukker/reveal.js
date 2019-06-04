@@ -1,0 +1,57 @@
+[data-markdown] {
+    height: 100%;
+    display: grid !important;
+    grid-template:
+        "header header  header header" 16%
+        " ...    lead    lead   ...  " 24%
+        " ...    main    main   ...  " 50%
+        " ...    footer footer  ...  " 10%
+        / 10px     1fr    1fr   10px;
+}
+
+/* h2, h3, h4: `header` */
+[data-markdown] > h2, [data-markdown] > h3, [data-markdown] > h4
+{
+    grid-area: header;
+}
+/* h1, p: `lead` */
+[data-markdown] > h1, [data-markdown] > p {
+    grid-area: lead;
+}
+/* ulタグはデフォルトでメイン*/
+[data-markdown] > ul {
+    grid-area: main;
+}
+.lead { grid-area: lead; }
+.main { grid-area: main; }
+.left {
+    grid-row: 3 / 4;
+    grid-column: 2 / 3;
+    font-size: 0.8em !important;
+}
+.right {
+    grid-row: 3 / 4;
+    grid-column: 3 / 4;
+    font-size: 0.8em !important;
+}
+.footer {
+    text-align: left;
+    font-size: 0.5em !important;
+    grid-area: footer;
+}
+.full { grid-area: 2/1/ 4/5; }
+
+li ul {
+    font-size: 0.8em !important;
+    margin-bottom: 10px !important;
+}
+
+/* h5, h6は画像などの見出し用に */
+.reveal h5 { font-size: 0.6em; }
+.reveal h6 {
+    padding-left: 2em;
+    padding-right: 2em;
+    font-weight: bolder;
+    text-align: left;
+    font-size: 0.6em;
+}
