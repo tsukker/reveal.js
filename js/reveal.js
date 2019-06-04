@@ -3424,6 +3424,14 @@
             value.push(indexh + 1);
             if (isVerticalSlide()) value.push('/', indexv + 1);
             break;
+          case 'h-v/t':
+            if (isVerticalSlide()) {
+              value.push((indexh + 1) + '-' + (indexv + 1));
+            } else {
+              value.push(indexh + 1);
+            }
+            value.push('/', getTotalHorizontalSlides());
+            break;
           default:
             value.push(indexh + 1);
             if (isVerticalSlide()) value.push('.', indexv + 1);
@@ -4434,6 +4442,15 @@
   }
 
   /**
+   * Retrieves all horizontal slides in this presentation.
+   */
+  function getHorizontalSlides() {
+
+    return toArray(dom.wrapper.querySelectorAll(HORIZONTAL_SLIDES_SELECTOR));
+
+  }
+
+  /**
    * Returns an array of objects where each object represents the
    * attributes on its respective slide.
    */
@@ -4460,6 +4477,17 @@
   function getTotalSlides() {
 
     return getSlides().length;
+
+  }
+
+  /**
+   * Retrieves the total number of horizontal slides in this presentation.
+   *
+   * @return {number}
+   */
+  function getTotalHorizontalSlides() {
+
+    return getHorizontalSlides().length;
 
   }
 
